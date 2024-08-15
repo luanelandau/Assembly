@@ -16,3 +16,5 @@ I have two possible pipelines in the scripts here:
 - ON-GOING work
 
 I highly recommend using the new pipeline if you have the adequate data. This has given me best results for humans, I have been able to resolve a very difficult genome region using hifiasm, and I am currently testing verkko.
+
+All of the links for specific githubs are in the scripts. At some point in the future I will add them all here. Please feel free to look at each script for now.
