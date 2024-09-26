@@ -2,32 +2,42 @@
 #SBATCH --qos=general-compute
 #SBATCH --partition=general-compute
 #SBATCH --account=omergokc
-#SBATCH --time=72:00:00
+#SBATCH --time=14:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=54
-#SBATCH --mem=900G
-#SBATCH --job-name=ragtag_HG01946
+#SBATCH --ntasks-per-node=32
+#SBATCH --mem=300G
+#SBATCH --job-name=ragtag1946
 #SBATCH --output=ragtag_HG01946.out
 #SBATCH --error=ragtag_HG01946.err
-#SBATCH --constraint=AVX512
 #SBATCH --export=NONE
 
 #ragtag is a software (https://github.com/malonge/RagTag) for correcting and scaffolding a draft assembly. 
 
-eval "$(/projects/academic/omergokc/own_modules/2023.01/2023.01/software/Core/anaconda3/2023.03-1/bin/conda shell.bash hook)"
-conda activate ragtag #this is my conda environment in which I have ragtag installed.
+#I have it installed in my conda environment
+eval "$(/projects/academic/omergokc/Luane/softwares/anaconda_new/bin/conda shell.bash hook)"
+conda activate ragtag
 
 #input
-assembly="/projects/academic/omergokc/Luane/HG01946/pilon/pilon4_out/HG01946_10kbp_flye_Medaka_4pilon.fasta" #path to draft genome
-THRDS=40 #number threads
+phased_assembly="/projects/academic/omergokc/Luane/HG01946/verkko/diploid/HG01946_verkko_set5/assembly.haplotype1.fasta" #path to draft genome
+phased_assembly_2="/projects/academic/omergokc/Luane/HG01946/verkko/diploid/HG01946_verkko_set5/assembly.haplotype2.fasta" #path to draft genome
+THRDS=32 #number threads
 sample="HG01946" #sample name
-Ref="/projects/academic/omergokc/Kendra/Ancients/CONGA/T2T.fa" #path to reference genome
+Ref="/projects/academic/omergokc/hg38.fa"
 
-# correct a query assembly
-ragtag.py correct ${Ref} ${assembly}
+#RagTag is only compatible with fasta files. 
+#Therefore, make sure your output from hifiasm is converted using these commands:
+#gfa tools is installed in the herro environment
+#gfatools gfa2fa $phased_assembly > HG01972.dip.hap1.p_ctg.fasta
 
 # scaffold a query assembly
-ragtag.py scaffold ${Ref} ragtag_output/ragtag.correct.fasta
+ragtag.py scaffold ${Ref} ${phased_assembly}
 
-# make joins and fill gaps in target.fa using sequences from query.fa
-#ragtag.py patch ${Ref} ragtag_output/ragtag.scaffold.fasta #I generally do not trust this step, but it is doable. Please read the manual for deciding wether to use it or not.
+#ragtag doesnt have an option to define the output name, so I need to rename the output folder 
+#before running it for the next haplotype.
+mv ragtag_output/ ragtag_output_hap1
+
+ragtag.py scaffold ${Ref} ${phased_assembly_2}
+
+mv ragtag_output/ ragtag_output_hap2
+
+conda deactivate
