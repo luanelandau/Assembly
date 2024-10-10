@@ -20,8 +20,8 @@ eval "$(/projects/academic/omergokc/Luane/softwares/anaconda_new/bin/conda shell
 conda activate Assembly
 
 #Inputs 
-hap1="/projects/academic/omergokc/Luane/HG02006/hifiasm/with_readcorrection/HG02006_hifiasm_haploid.bp.p_ctg.fasta" #haplotype1 path
-hap2="/projects/academic/omergokc/Luane/HG02006/hifiasm/with_readcorrection/HG02006_hifiasm_haploid.bp.a_ctg.fasta" #haplotype2 path
+hap1="/projects/academic/omergokc/Luane/HG02006/ragtag/ragtag_output_hap1/ragtag.scaffold.fasta"
+hap2="/projects/academic/omergokc/Luane/HG02006/ragtag/ragtag_output_hap2/ragtag.scaffold.fasta"
 reads="/projects/academic/omergokc/Luane/HG01922/herro/HG01922_10kbp_HERRO.fasta" #your corrected reads
 threads=32
 
